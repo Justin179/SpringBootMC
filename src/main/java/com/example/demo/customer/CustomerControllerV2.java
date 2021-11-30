@@ -1,31 +1,36 @@
 package com.example.demo.customer;
 
-import com.example.demo.DemoApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-@RequestMapping(path = "api/v1/customers")
+@RequestMapping(path = "api/v2/customers")
 @RestController
-@Deprecated
-public class CustomerController {
+public class CustomerControllerV2 {
 
     private CustomerService customerService;
 
     @Autowired
-    public CustomerController( CustomerService customerService) { // 注入點
+    public CustomerControllerV2(CustomerService customerService) { // 注入點
         this.customerService = customerService;
     }
 
     @GetMapping
     List<Customer> getCustomers(){
-
         return customerService.getCustomers();
     }
 
+    @GetMapping(path = "{customerId}")
+    Customer getCustomer(@PathVariable("customerId") Long id){
+        return customerService.getCustomer(id);
+    }
+
     @PostMapping
-    void createNewCustomer(@RequestBody Customer customer){
+    void createNewCustomer(@Valid @RequestBody Customer customer){
         System.out.println("post request...");
         System.out.println(customer);
     }
